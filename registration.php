@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Registration</title>
-</head>
-<body>
-
-</body>
-</html>
-
 
 
 <!DOCTYPE html>
@@ -18,7 +7,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>freekick</title>
+    <title>registration</title>
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
     <link href="assets/img/favicon.png" rel="icon">
@@ -120,8 +109,19 @@
                     {
 
                     $password = mysqli_real_escape_string($con,$password);
+
+
                     $mobile = stripslashes($_REQUEST['mobile']);
                     $mobile = mysqli_real_escape_string($con,$mobile);
+
+                    $duplicate=mysqli_query($con,"select * from register where username='$username'");
+if (mysqli_num_rows($duplicate)>0)
+{
+echo "User name is already exists.";
+}
+else{
+
+
                     $query = "INSERT into `register` (username, password, email, mobile)
 VALUES ('$username', '".md5($password)."', '$email', '$mobile')";
                     $result = mysqli_query($con,$query);
@@ -129,7 +129,7 @@ VALUES ('$username', '".md5($password)."', '$email', '$mobile')";
                         echo "<div class='form'>
 <h3>You are registered successfully.</h3>
 <br/>Click here to <a href='login.php'>Login</a></div>";
-                    }}
+                    }}}
                 }else{
                     ?>
                     <div class="form">

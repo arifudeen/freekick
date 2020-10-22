@@ -49,10 +49,11 @@
                 <li class="active"><a href="coordinator.php">Home</a></li>
                 <li><a href="#about">Notifications</a></li>
 
-                <li><a href="#menu">New tournament</a></li>
-                <li><a href="#gallery">Tournament</a></li>
+                <li><a href="tournament.php">New tournament</a></li>
+                <li><a href="#gallery">League Tournament</a></li>
+                <li><a href="#gallery">Knockout Tournament</a></li>
                 <li><a href="#book-a-table">Set rules&regulations</a></li>
-                <li><a href="#menu">Complaints</a></li>
+                <li><a href="complaints.php">Complaints</a></li>
                 <li class="book-a-table text-center"><a href="home.php">Logout</a></li>
             </ul>
         </nav>
@@ -92,12 +93,32 @@
             </div>
             <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
                 <h3>Notifications.</h3>
+                <?php
+                require('db.php');
+                $result = mysqli_query($con,"SELECT * FROM notification order by notificationid desc ");
 
-                <ul>
-                    <li><i class="icofont-check-circled"></i> Version update coming soon...</li>
-                    <li><i class="icofont-check-circled"></i> Importand data link.</li>
-                    <li><i class="icofont-check-circled"></i> Thankyou for regiter  </li>
-                </ul>
+                if (mysqli_num_rows($result) > 0) {
+
+                    $i=0;
+                    while($row = mysqli_fetch_array($result)) {
+                        ?>
+                        <ul>
+                            <li><i class="icofont-check-circled"></i><?php echo $row["date"]; ?>:&nbsp<?php echo $row["notification"]; ?></li>
+                        </ul>
+                        <?php
+                        $i++;
+                    }
+                    ?>
+                    </table><br><br><br>
+                    <?php
+                }
+                else{
+
+                }
+                ?>
+
+
+
 
             </div>
         </div>
@@ -126,7 +147,39 @@
         <div class="section-title">
             <h2>Rules and regulations</h2>
             <p>Set rules and regulation of tournament</p>
+
         </div>
+
+
+        <?php
+        session_start();
+       $username=$_SESSION['username'];
+
+
+        echo"$username";
+
+        require('db.php');
+        $id = mysqli_query($con,"SELECT * FROM register where username='$username'");
+
+        if (mysqli_num_rows($id) > 0) {
+
+                $i=0;
+                while($row = mysqli_fetch_array($id)) {
+                    ?>
+                    <tr>
+                        <td><?php echo $row["id"]; ?></td>
+                    </tr>
+                    <?php
+                    $i++;
+                }
+                ?>
+            </table><br><br><br>
+            <?php
+        }
+        else{
+            echo "No result found";
+        }
+        ?>
     </div>
 
 </section>
