@@ -49,9 +49,9 @@
                 <li class="active"><a href="coordinator.php">Home</a></li>
                 <li><a href="#about">Notifications</a></li>
 
-                <li><a href="tournament.php">New tournament</a></li>
-                <li><a href="#gallery">League Tournament</a></li>
-                <li><a href="#gallery">Knockout Tournament</a></li>
+                <li><a href="newtournament.php">New tournament</a></li>
+                <li><a href="league.php">League Tournament</a></li>
+                <li><a href="knockout.php">Knockout Tournament</a></li>
                 <li><a href="#book-a-table">Set rules&regulations</a></li>
                 <li><a href="complaints.php">Complaints</a></li>
                 <li class="book-a-table text-center"><a href="home.php">Logout</a></li>

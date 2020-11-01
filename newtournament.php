@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>registration</title>
+    <title>new_tournamnet</title>
     <meta content="" name="descriptison">
     <meta content="" name="keywords">
     <link href="assets/img/favicon.png" rel="icon">
@@ -46,9 +46,9 @@
 
         <nav class="nav-menu d-none d-lg-block">
             <ul>
-                <li class="active"><a href="home.php">Home</a></li>
+                <li class="active"><a href="coordinator.php">Home</a></li>
 
-                <li class="book-a-table text-center"><a href="login.php">Login</a></li>
+                <li class="book-a-table text-center"><a href="home.php">Logout</a></li>
             </ul>
         </nav>
 
@@ -61,7 +61,7 @@
         <div class="row">
             <div class="col-lg-8">
                 <h1>Welcome to <span>Coordinator</span></h1>
-                <h2>Newtournament</h2>
+                <h2>New Tournament</h2>
             </div>
 
 
@@ -81,9 +81,13 @@
                 </div>
             </div>
             <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-                <h3>new tournament</h3><br>
+                <h1>New Tournament</h1>
+                <br>
+
                 <?php
                 require('db.php');
+                session_start();
+                $username=$_SESSION['username'];
                 if (isset($_REQUEST['tournamentname'])){
 
                     $tournamentname = stripslashes($_REQUEST['tournamentname']);
@@ -91,13 +95,17 @@
                     $tournamentname = mysqli_real_escape_string($con,$tournamentname);
                     $names = stripslashes($_REQUEST['names']);
                     $names = mysqli_real_escape_string($con,$names);
+                    $teams = stripslashes($_REQUEST['teams']);
+                    $teams = mysqli_real_escape_string($con,$teams);
+                    $username= mysqli_real_escape_string($con,$username);
+                    $mode = stripslashes($_REQUEST['mode']);
+                    $mode = mysqli_real_escape_string($con,$mode);
 
 
-
-
-
-                            $query = "INSERT into `tournament` (tournamentname, names)
-VALUES ('$tournamentname','$names')";
+                    $query1 = "DELETE FROM `tournament` WHERE username='$username'";
+                    $result1 = mysqli_query($con,$query1);
+                            $query = "INSERT into `tournament` (tournamentname, names, teams,username,mode)
+VALUES ('$tournamentname','$names','$teams','$username','$mode')";
                             $result = mysqli_query($con,$query);
                             if($result){
                                 echo "<div class='form'>
@@ -114,17 +122,18 @@ VALUES ('$tournamentname','$names')";
                                     <td><input type="text" name="tournamentname" placeholder="" required /></td>
                                 </tr>
                                 <tr>
-                                    <td><h5>names</h5></td>
-                                    <td><textarea name="names" rows="10" cols="20" required ></textarea></td>
+                                    <td><h5>Number of teams</h5></td>
+                                    <td><input type="text" name="teams" rows="10" cols="20" required /></td>
                                 </tr>
                                 <tr>
-                                    <td>
-                                        Tournament Mode
-                                    </td>
-                                    <td>
-                                    knockout<input type="radio"name="mode">league<input type="radio" name="mode">
-                                    </td>
+                                    <td><h5>Name Of Teams (one per line)</h5></td>
+                                    <td><textarea name="names" rows="10" cols="23" required ></textarea></td>
                                 </tr>
+                                <tr>
+                                    <td><h5>Tournament Mode</h5></td>
+                                    <td>League<input type="radio" name="mode" value="league" required />Knockout<input type="radio" name="mode" value="knockout"></td>
+                                </tr>
+
 
 
                                 <tr>
