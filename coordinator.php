@@ -67,7 +67,12 @@
     <div class="container position-relative text-center text-lg-left" data-aos="zoom-in" data-aos-delay="100">
         <div class="row">
             <div class="col-lg-8">
-                <h1>Welcome  <span>COORDINATOR</span></h1>
+                <?php
+                require('db.php');
+                session_start();
+                $username=$_SESSION['username'];
+                ?>
+                <h1>WELCOME:  <span> <?php echo "$username"; ?></span></h1>
                 <h2>Lets   make   your   dream...</h2>
 
                 <div class="btns">
@@ -132,8 +137,82 @@
     <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-            <h2>Tournament</h2>
-            <p>Manage your tournament</p>
+            <h2>Rules and regulations</h2>
+            <p>Set rules and regulation of tournament</p>
+            <?php
+            require('db.php');
+            $username=$_SESSION['username'];
+
+
+            if (isset($_REQUEST['rules'])){
+
+                $rules = stripslashes($_REQUEST['rules']);
+
+                $rules = mysqli_real_escape_string($con,$rules);
+                $tournamentid = stripslashes($_REQUEST['tournamentid']);
+
+                $tournamentid = mysqli_real_escape_string($con,$tournamentid);
+
+                $query = "INSERT into `rulesregulation` (rules,tournamentid)
+                VALUES ('$rules','$tournamentid')";
+                $result = mysqli_query($con,$query);
+                if($result){
+                    echo "<div class='form'>
+                         <h3>Complaint Is  Successfully Posted.</h3>
+                             </div>";
+                }
+            }else{
+                ?>
+                <div>
+                    <?php
+                    $username=$_SESSION['username'];
+
+                    require('db.php');
+                    $tournamentid = mysqli_query($con,"SELECT tournamentid FROM tournament where username='$username'");
+
+                    if (mysqli_num_rows($tournamentid) > 0) {
+
+                        $i=0;
+                        while($row = mysqli_fetch_array($tournamentid)) {
+                            ?>
+                            <div class="form">
+                                <form name="rules" action="" method="post">
+                                    <table >
+                                        <tr>
+                                            <td><h5>Rules and Regulations</h5></td>
+                                            <td><textarea name="rules" rows="5" cols="30%"  required /></textarea> </td>
+                                        </tr>
+                                        <tr><td> Your Tournament ID: </td>
+                                            <td><input readonly value="<?php echo $row["tournamentid"]; ?>"name="tournamentid"> </td>
+                                        </tr>
+
+
+
+                                        <tr>
+                                            <td></td>
+                                            <td><h5><input type="submit" name="submit" value="post" /></h5></td>
+                                        </tr>
+                                    </table>
+                                </form>
+
+                            </div>
+                            <?php
+                            $i++;
+                        }
+                        ?>
+                        </table><br><br><br>
+                        <?php
+                    }
+                    else{
+                        echo "No result found";
+                    }
+                    ?>
+                </div>
+
+
+            <?php } ?>
+
+
         </div>
     </div>
 </section>
@@ -151,35 +230,7 @@
         </div>
 
 
-        <?php
-        session_start();
-       $username=$_SESSION['username'];
 
-
-        echo"$username";
-
-        require('db.php');
-        $id = mysqli_query($con,"SELECT * FROM register where username='$username'");
-
-        if (mysqli_num_rows($id) > 0) {
-
-                $i=0;
-                while($row = mysqli_fetch_array($id)) {
-                    ?>
-                    <tr>
-                        <td><?php echo $row["id"]; ?></td>
-                    </tr>
-                    <?php
-                    $i++;
-                }
-                ?>
-            </table><br><br><br>
-            <?php
-        }
-        else{
-            echo "No result found";
-        }
-        ?>
     </div>
 
 </section>

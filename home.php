@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="col-lg-4 d-flex align-items-center justify-content-center" data-aos="zoom-in" data-aos-delay="200">
-                <a href="https://youtu.be/1u5EfzKK6Mk" class="venobox play-btn" data-vbtype="video" data-autoplay="true"></a>
+                <a href="https://www.youtube.com/watch?v=GlrxcuEDyF8" class="venobox play-btn" data-vbtype="video" data-autoplay="true"></a>
             </div>
 
         </div>
@@ -89,23 +89,65 @@
                 </div>
             </div>
             <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
-                <h3>Online tournment management system.</h3>
-                <p class="font-italic">
-                    It is the first and multi interaction tournament management platform.
-                </p>
-                <ul>
-                    <li><i class="icofont-check-circled"></i> you can manage tournamnet here.</li>
-                    <li><i class="icofont-check-circled"></i> Easy fixture...</li>
-                    <li><i class="icofont-check-circled"></i> Easy scoreboard</li>
-                </ul>
-                <p>
-                    lets make your dream here.
-                </p>
-            </div>
-        </div>
+                <h3>Search Tournament</h3>
+                <?php
+                require('db.php');
+                session_start();
 
-    </div>
-</section>
+                if (isset($_POST['tournamentid'])){
+
+                    $tournamentid = stripslashes($_REQUEST['tournamentid']);
+
+                    $tournamentid = mysqli_real_escape_string($con,$tournamentid);
+
+
+
+
+
+                    $query = "SELECT * FROM `tournament` WHERE tournamentid='$tournamentid'";
+                    $result = mysqli_query($con, $query) or die(mysql_error());
+                    $rows = mysqli_num_rows($result);
+
+                    $data = mysqli_fetch_assoc($result);
+
+                    if ($rows == 1) {
+                        $_SESSION['tournamentid'] = $tournamentid;
+                        if($data['mode'] == 'league' ) {
+                            header("Location: teamofficialsleague.php");
+                        }
+                        else {
+
+                            header("Location: teamofficialsknock.php");
+                        }
+                    }
+
+
+
+                    else {
+
+                        echo "<div class='form'>
+<h3>Your Tournament ID was Unavailable</h3>
+<br/>Click here to <a href='home.php'>Try onesmore</a></div>";
+                    }
+                }else {
+
+
+                    ?>
+                    <div class="form">
+                        <form action="" method="post" name="login">
+                            <table >
+                                <tr>
+                                    <td><h5>Tournament ID</h5></td>
+                                    <td><input type="text" name="tournamentid" placeholder="" required /></td>
+                                    <td><h5><input name="submit" type="submit" value="GO" class="btn-danger" /></h5></td>
+                                </tr>
+                            </table>
+                        </form>
+
+                    </div>
+                <?php } ?>
+
+            </div></div></div></section>
 
 
 
@@ -115,16 +157,19 @@
         <div class="section-title">
             <p>Search  Tournament</p>
             <br> <br> <br> <br>
-
-            <table >
-                <tr>
-                    <td><h5>Search tournament</h5></td>
-                    <td><h5><input type="search" name="search"  id="search"></h5></td>
-                    <td><h5><input type="button" name="srbtn" value="GO"></h5></td>
-                </tr>
-            </table>
-        </div>
-</section>
+            <h1>Online tournment management system.</h1>
+            <p class="font-italic">
+                It is the first and multi interaction tournament management platform.
+            </p>
+            <ul>
+                <li><i class="icofont-check-circled"></i> you can manage tournamnet here.</li>
+                <li><i class="icofont-check-circled"></i> Easy fixture...</li>
+                <li><i class="icofont-check-circled"></i> Easy scoreboard</li>
+            </ul>
+            <p>
+                lets make your dream here.
+            </p>
+        </div></div></section>
 
 
 

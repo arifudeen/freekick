@@ -60,12 +60,39 @@
     <div class="container position-relative text-center text-lg-left" data-aos="zoom-in" data-aos-delay="100">
         <div class="row">
             <div class="col-lg-8">
-                <h1>Welcome to <span>FREE KICK</span></h1>
-                <h2>Football  Tournament  Management  System</h2>
+                <?php
+                session_start();
+                require('db.php');
+                $username=$_SESSION['username'];
+                $result = mysqli_query($con,"SELECT * FROM tournament where username='$username' and mode='knockout'");
+
+                if (mysqli_num_rows($result) > 0) {
+                    ?>
+                    <table>
+
+                        <?php
+                        $i=0;
+                        while($row = mysqli_fetch_array($result)) {
+                            ?>
+                            <h1>TOURNAMENT NAME: <span> <?php echo $row["tournamentname"]; ?></span></h1>
+                            <h1>TOURNAMENT ID: <span> <?php echo $row["tournamentid"]; ?></span></h1>
+
+                            <?php
+                            $i++;
+                        }
+                        ?>
+                    </table><br><br><br>
+                    <?php
+                }
+                else{
+                    echo "No result found";
+                }
+                ?>
+
 
                 <div class="btns">
-                    <a href="login.php" class="btn-menu animated fadeInUp scrollto">Login</a>
-                    <a href="#book-a-table" class="btn-book animated fadeInUp scrollto">Search a Tournament</a>
+                    <a href="#about" class="btn-menu animated fadeInUp scrollto">Fixture</a>
+                    <a href="#gallery" class="btn-book animated fadeInUp scrollto">Result update</a>
                 </div>
             </div>
             <div class="col-lg-4 d-flex align-items-center justify-content-center" data-aos="zoom-in" data-aos-delay="200">
@@ -100,7 +127,6 @@
                     <?php
 
                     require('db.php');
-                    session_start();
                     $username=$_SESSION['username'];
 
 
