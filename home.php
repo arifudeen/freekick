@@ -49,7 +49,7 @@
                 <li><a href="login.php">Login</a></li>
                 <li><a href="registration.php">Sign up</a></li>
                 <li><a href="#gallery">Gallery</a></li>
-                <li class="book-a-table text-center"><a href="#book-a-table">Search Tournament</a></li>
+                <li class="book-a-table text-center"><a href="#about">Search Tournament</a></li>
             </ul>
         </nav>
 
@@ -66,7 +66,7 @@
 
                 <div class="btns">
                     <a href="login.php" class="btn-menu animated fadeInUp scrollto">Login</a>
-                    <a href="#book-a-table" class="btn-book animated fadeInUp scrollto">Search a Tournament</a>
+                    <a href="#about" class="btn-book animated fadeInUp scrollto">Search a Tournament</a>
                 </div>
             </div>
             <div class="col-lg-4 d-flex align-items-center justify-content-center" data-aos="zoom-in" data-aos-delay="200">

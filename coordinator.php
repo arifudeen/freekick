@@ -47,11 +47,18 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="active"><a href="coordinator.php">Home</a></li>
-                <li><a href="#about">Notifications</a></li>
+                <li><a href="#about">Notification</a></li>
+                <script>
+                    function myfunction()
+                    {
+                        alert("Are you sure you want to create new tournament? your existing data will be restore.");
+                    }
+                </script>
 
-                <li><a href="newtournament.php">New tournament</a></li>
+
+                <li><a href="newtournament.php" onclick="myfunction()">New tournament</a></li>
                 <li><a href="league.php">League Tournament</a></li>
-                <li><a href="knockout.php">Knockout Tournament</a></li>
+                <li><a href="knockout.php" onclick=alert("are you")>Knockout Tournament</a></li>
                 <li><a href="#book-a-table">Set rules&regulations</a></li>
                 <li><a href="complaints.php">Complaints</a></li>
                 <li class="book-a-table text-center"><a href="home.php">Logout</a></li>
@@ -220,20 +227,6 @@
 
 
 
-<section id="gallery" class="gallery">
-
-    <div class="container" data-aos="fade-up">
-        <div class="section-title">
-            <h2>Rules and regulations</h2>
-            <p>Set rules and regulation of tournament</p>
-
-        </div>
-
-
-
-    </div>
-
-</section>
 
 
 <footer id="footer">

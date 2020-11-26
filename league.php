@@ -337,7 +337,7 @@
             if($result){
                 echo "<div class='form'>
                          <h3>Result Is  Successfully Posted. Click 
-                         Here To <a href='knockout.php'>Update another</a></h3>
+                         Here To <a href='league.php'>Update another</a></h3>
                              </div>";
             }
         }else{
@@ -418,36 +418,36 @@
             <div class="col-lg-4">
                     <?php
                     require('db.php');
-                    if (isset($_REQUEST['update'])){
+                    if (isset($_REQUEST['load'])){
 
-                        $hometeam1 = stripslashes($_REQUEST['hometeam1']);
+                        $hometeam3 = stripslashes($_REQUEST['hometeam3']);
 
-                        $hometeam1 = mysqli_real_escape_string($con,$hometeam1);
-                        $resultid = stripslashes($_REQUEST['resultid']);
+                        $hometeam3 = mysqli_real_escape_string($con,$hometeam3);
+                        $resultid3 = stripslashes($_REQUEST['resultid3']);
 
-                        $resultid = mysqli_real_escape_string($con,$resultid);
-                        $awayteam1 = stripslashes($_REQUEST['awayteam1']);
+                        $resultid3 = mysqli_real_escape_string($con,$resultid3);
+                        $awayteam3 = stripslashes($_REQUEST['awayteam3']);
 
-                        $awayteam1 = mysqli_real_escape_string($con,$awayteam1);
-                        $homegoals1 = stripslashes($_REQUEST['homegoals1']);
+                        $awayteam3 = mysqli_real_escape_string($con,$awayteam3);
+                        $homegoals3 = stripslashes($_REQUEST['homegoals3']);
 
-                        $homegoals1 = mysqli_real_escape_string($con,$homegoals1);
-                        $awaygoals1 = stripslashes($_REQUEST['awaygoals1']);
+                        $homegoals3 = mysqli_real_escape_string($con,$homegoals3);
+                        $awaygoals3 = stripslashes($_REQUEST['awaygoals3']);
 
-                        $awaygoals1 = mysqli_real_escape_string($con,$awaygoals1);
-                        $datetime1 = stripslashes($_REQUEST['datetime1']);
+                        $awaygoals3 = mysqli_real_escape_string($con,$awaygoals3);
+                        $datetime3 = stripslashes($_REQUEST['datetime3']);
 
-                        $datetime1 = mysqli_real_escape_string($con,$datetime1);
-
-
-                        $venue1 = stripslashes($_REQUEST['venue1']);
-
-                        $venue1 = mysqli_real_escape_string($con,$venue1);
+                        $datetime3 = mysqli_real_escape_string($con,$datetime3);
 
 
-                        $query1 = "UPDATE results SET datetime='$datetime1',venue='$venue1',hometeam='$hometeam1',awayteam='$awayteam1',homegoals='$homegoals1',awaygoals='$awaygoals1' WHERE resultid='$resultid'";
+                        $venue3 = stripslashes($_REQUEST['venue3']);
 
-                        if ($con->query($query1) === TRUE) {
+                        $venue3 = mysqli_real_escape_string($con,$venue3);
+
+
+                        $query3 = "UPDATE results SET datetime='$datetime3',venue='$venue3',hometeam='$hometeam3',awayteam='$awayteam3',homegoals='$homegoals3',awaygoals='$awaygoals3' WHERE resultid='$resultid3'";
+
+                        if ($con->query($query3) === TRUE) {
                             echo "Record updated successfully.  Click 
                          Here To <a href='league.php'>Update another</a>";
                         } else {
@@ -471,7 +471,22 @@
                     <span>Update results</span>
                     <?php
                     require('db.php');
-                    $result = mysqli_query($con,"SELECT * FROM results where username='$username'");
+                    $username=$_SESSION['username'];
+                    $tournamentid1 = mysqli_query($con,"SELECT tournamentid FROM tournament where username='$username' and mode='league'");
+
+                    if (mysqli_num_rows($tournamentid1) > 0) {
+                        $i=0;
+                        while($row = mysqli_fetch_array($tournamentid1)) {
+
+                        $tournamentid2=$row["tournamentid"];
+
+                            $i++;
+                        }
+                    }
+
+
+
+                    $result = mysqli_query($con,"SELECT * FROM results where tournamentid='$tournamentid2'");
 
                     if (mysqli_num_rows($result) > 0) {
                         ?>
@@ -511,48 +526,84 @@
                     }
                     ?>
 
+                    <?php
+                    require('db.php');
 
-                    <div class="form">
-                        <form name="update" action="" method="post">
-                            <table >
-                                <tr>
-                                    <td><h5>Update ID</h5></td>
-                                    <td><input type="text" name="resultid"  required /> </td><td><input type="button" value="load" name="load" onclick="myFunction()"></td>
-                                </tr>
-                                <tr><td>Date And Time of the match</td>
-                                    <td>  <input type="datetime-local" name="datetime1">
-                                    </td></tr>
-                                <tr><td>Venue of the match</td>
-                                    <td>  <input type="text" name="venue1">
-                                    </td></tr>
-                                <tr>
-                                    <td><h5>Home Team</h5></td>
-                                    <td><input type="text" name="hometeam1"></td>
-                                </tr>
-                                <tr>
-                                    <td><h5>Away Team</h5></td>
-                                    <td><input type="text" name="awayteam1"></td>
-                                </tr>
-                                <tr>
-                                    <td><h5>Home Goals</h5></td>
-                                    <td><input type="text" name="homegoals1"></td>
-                                </tr>
-                                <tr>
-                                    <td><h5>Away Goals</h5></td>
-                                    <td><input type="text" name="awaygoals1"></td>
-                                </tr>
+                    if (isset($_POST['resultid'])){
+
+                        $resultid = stripslashes($_REQUEST['resultid']);
+
+                        $resultid = mysqli_real_escape_string($con,$resultid);
 
 
 
 
-                                <tr>
-                                    <td></td>
-                                    <td><h5><input type="submit" name="update" value="update" /></h5></td>
-                                </tr>
-                            </table>
-                        </form>
-                    </div>
+
+                        $query = "SELECT * FROM `results` WHERE resultid='$resultid'";
+                        $result = mysqli_query($con, $query) or die(mysql_error());
+                        $rows = mysqli_num_rows($result);
+
+                        $data = mysqli_fetch_assoc($result);
+
+                        if ($rows == 1) {
+
+                            $result1 = mysqli_query($con,"SELECT * FROM results where resultid='$resultid' ");
+
+                            if (mysqli_num_rows($result1) > 0) {
+
+                                $i=0;
+                                while($row = mysqli_fetch_array($result1)) {
+                                    ?>
+                                    <form name="load" action="" method="post">
+                                        <table>
+                                            <tr><td>Match ID</td><td><input readonly name="resultid3" value="<?php echo $resultid; ?>" ></td></tr>
+                                            <tr><td>Match Date&Time</td><td><input type="text" name="datetime3" value="<?php echo $row["datetime"]; ?>" ></td></tr>
+                                            <tr><td>Match Venue</td><td><input type="text" name="venue3" value="<?php echo $row["venue"]; ?>" ></td></tr>
+                                            <tr><td>Home Team</td><td><input type="text" name="hometeam3" value="<?php echo $row["hometeam"]; ?>" ></td>
+                                            <tr><td>Away Team</td><td><input type="text" name="awayteam3" value="<?php echo $row["awayteam"]; ?>" ></td></tr>
+                                            <tr><td>Home Goals</td><td><input type="text" name="homegoals3" value="<?php echo $row["homegoals"]; ?>" ></td></tr>
+                                            <tr><td>Away Goals</td><td><input type="text" name="awaygoals3" value="<?php echo $row["awaygoals"]; ?>" ></td></tr>
+                                            <tr><td></td><td><input type="submit" name="load" value="Update" ></td></tr>
+                                        </table> </form>
+                                    <?php
+                                    $i++;
+                                }
+
+                            }
+                            else{
+
+                            }
+
+
+
+                        }
+
+
+
+
+                        else {
+
+                            echo "Match ID didnt match";
+                        }
+                    }else {}
+
+
+                        ?>
+                        <div class="form">
+                            <form action="" method="post" name="login">
+                                <table >
+                                    <tr>
+                                        <td><h5>Match id</h5></td>
+                                        <td><input type="text" name="resultid" placeholder="" required /></td>
+                                        <td><h5><input name="submit" type="submit" value="LOAD"  /></h5></td>
+                                    </tr>
+                                </table>
+                            </form>
+
+                        </div>
                     <?php } ?>
+
+
 
                 </div>
             </div>

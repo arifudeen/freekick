@@ -116,6 +116,7 @@
             </div>
             <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1 content">
                 <h1>Fixture Of Knockout Tournamnet</h1>
+                <h2>remaining fixtures</h2>
                 <h3>
 
                 <?php
@@ -347,28 +348,28 @@
             <div class="col-lg-4">
                 <?php
                 require('db.php');
-                if (isset($_REQUEST['update'])){
+                if (isset($_REQUEST['load'])){
 
-                    $winteam1 = stripslashes($_REQUEST['winteam1']);
+                    $winteam3 = stripslashes($_REQUEST['winteam3']);
 
-                    $winteam1 = mysqli_real_escape_string($con,$winteam1);
-                    $knockid = stripslashes($_REQUEST['knockid']);
+                    $winteam3 = mysqli_real_escape_string($con,$winteam3);
+                    $knockid3 = stripslashes($_REQUEST['knockid3']);
 
-                    $knockid = mysqli_real_escape_string($con,$knockid);
+                    $knockid3 = mysqli_real_escape_string($con,$knockid3);
 
-                    $datetime1 = stripslashes($_REQUEST['datetime1']);
+                    $datetime3 = stripslashes($_REQUEST['datetime3']);
 
-                    $datetime1 = mysqli_real_escape_string($con,$datetime1);
-
-
-                    $venue1 = stripslashes($_REQUEST['venue1']);
-
-                    $venue1 = mysqli_real_escape_string($con,$venue1);
+                    $datetime3 = mysqli_real_escape_string($con,$datetime3);
 
 
-                    $query1 = "UPDATE knockout SET datetime='$datetime1',venue='$venue1',winteam='$winteam1' WHERE knockid='$knockid'";
+                    $venue3 = stripslashes($_REQUEST['venue3']);
 
-                    if ($con->query($query1) === TRUE) {
+                    $venue3 = mysqli_real_escape_string($con,$venue3);
+
+
+                    $query3 = "UPDATE knockout SET datetime='$datetime3',venue='$venue3',winteam='$winteam3' WHERE knockid='$knockid3'";
+
+                    if ($con->query($query3) === TRUE) {
                         echo "Record updated successfully Click here to <a href='knockout.php'>update another</a>";
                     } else {
                         echo "Error updating record: " . $con->error;
@@ -391,7 +392,22 @@
             <span>Update results</span>
             <?php
             require('db.php');
-            $result = mysqli_query($con,"SELECT * FROM knockout where username='$username'");
+              $tournamentid1 = mysqli_query($con,"SELECT tournamentid FROM tournament where username='$username' and mode='knockout'");
+
+                    if (mysqli_num_rows($tournamentid1) > 0) {
+                        $i=0;
+                        while($row = mysqli_fetch_array($tournamentid1)) {
+
+                            $tournamentid2=$row["tournamentid"];
+
+                            $i++;
+                        }
+                    }
+
+
+
+            $result = mysqli_query($con,"SELECT * FROM knockout where tournamentid='$tournamentid2'");
+
 
             if (mysqli_num_rows($result) > 0) {
                 ?>
@@ -425,35 +441,84 @@
             }
             ?>
 
-
-            <div class="form">
-                <form name="update" action="" method="post">
-                    <table >
-                        <tr>
-                            <td><h5>Match no</h5></td>
-                            <td><input type="text" name="knockid"  required /> </td>
-                        </tr>
-                        <tr><td>Date And Time of the match</td>
-                            <td>  <input type="datetime-local" name="datetime1">
-                            </td></tr>
-                        <tr><td>Venue of the match</td>
-                            <td>  <input type="text" name="venue1">
-                            </td></tr>
-                        <tr>
-                            <td><h5>Qualified Team</h5></td>
-                            <td><input type="text" name="winteam1"></td>
-                        </tr>
-
-
-
-                        <tr>
-                            <td></td>
-                            <td><h5><input type="submit" name="update" value="update" /></h5></td>
-                        </tr>
-                    </table>
-                </form>
-            </div>
             <?php } ?>
+
+            <?php
+            require('db.php');
+
+            if (isset($_POST['knockid'])){
+
+                $knockid = stripslashes($_REQUEST['knockid']);
+
+                $knockid = mysqli_real_escape_string($con,$knockid);
+
+
+
+
+
+                $query = "SELECT * FROM `knockout` WHERE knockid='$knockid'";
+                $result = mysqli_query($con, $query) or die(mysql_error());
+                $rows = mysqli_num_rows($result);
+
+                $data = mysqli_fetch_assoc($result);
+
+                if ($rows == 1) {
+
+                    $result1 = mysqli_query($con,"SELECT * FROM knockout where knockid='$knockid' ");
+
+                    if (mysqli_num_rows($result1) > 0) {
+
+                        $i=0;
+                        while($row = mysqli_fetch_array($result1)) {
+                            ?>
+                                <form name="load" action="" method="post">
+                                    <table>
+                                        <tr><td>Match ID</td><td><input readonly name="knockid3" value="<?php echo $knockid; ?>" ></td></tr>
+                                        <tr><td>Match Date&Time</td><td><input type="text" name="datetime3" value="<?php echo $row["datetime"]; ?>" ></td></tr>
+                                        <tr><td>Match Venue</td><td><input type="text" name="venue3" value="<?php echo $row["venue"]; ?>" ></td></tr>
+                                        <tr><td>Qualified Team</td><td><input type="text" name="winteam3" value="<?php echo $row["winteam"]; ?>" ></td></tr>
+                                        <tr><td></td><td><input type="submit" name="load" value="Update" ></td></tr>
+                                    </table> </form>
+                            <?php
+                            $i++;
+                        }
+
+                    }
+                    else{
+
+                    }
+
+
+
+                    }
+
+
+
+
+                else {
+
+                    echo "Match ID didnt match";
+                }
+            }else {
+
+
+                ?>
+                <div class="form">
+                    <form action="" method="post" name="login">
+                        <table >
+                            <tr>
+                                <td><h5>Match id</h5></td>
+                                <td><input type="text" name="knockid" placeholder="" required /></td>
+                                <td><h5><input name="submit" type="submit" value="LOAD"  /></h5></td>
+                            </tr>
+                        </table>
+                    </form>
+
+                </div>
+            <?php } ?>
+
+
+
 
         </div>
     </div>
@@ -492,31 +557,29 @@
 
 
 
-            }else{
+            }else{}
             ?>
 
-        </div>
 
-        <div class="form">
-            <form name="names" action="" method="post">
-                <table >
+                    <div class="form">
+                    <form name="names" action="" method="post">
+                        <table >
 
-                    <tr>
-                        <td><h5>NEXT ROUND TEAMS</h5></td>
-                        <td><textarea name="names" rows="5" cols="30%"  required /></textarea> </td>
-                    </tr>
-
+                            <tr>
+                                <td><h5>NEXT ROUND TEAMS</h5></td>
+                                <td><textarea name="names" rows="6" cols="15"></textarea></td>
+                            </tr>
 
 
 
-                    <tr>
-                        <td>LOAD NEXT ROUND</td>
-                        <td><h5><input type="submit" name="submit" value="NEXT ROUND" /></h5></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-        <?php } ?>
+
+                            <tr>
+                                <td>LOAD NEXT ROUND</td>
+                                <td><h5><input type="submit" name="submit" value="NEXT ROUND" /></h5></td>
+                            </tr>
+                        </table>
+                    </form>
+
 
 
 
